@@ -5,11 +5,13 @@ const plumber = require('gulp-plumber');
 const imagemin = require('gulp-imagemin');
 const cleanCSS = require('gulp-clean-css');
 const uglify= require('gulp-uglify');
+const sass = require('gulp-sass');
 
 const SOURCE = './js/*.js';
 const DESTINATION = 'dist';
 const IMAGE_SOURCE = './pre-images/*';
 const STYLE_SOURCE = './css/*';
+const SASS_SOURCE='./sass/*.scss';
 
 function lint(){
     return src(SOURCE)
@@ -45,9 +47,15 @@ function compressJs() {
           .pipe(dest('dist/js'));
 }
 
+function compileSass(){
+    return src(SASS_SOURCE)
+    .pipe(sass())
+    .pipe(dest('dist/sass'));
+}
+
 function fileWatch(){
      return watch(SOURCE,filesChanged);
 }
 
-exports.default = parallel(CompressImage, minifyCss, compressJs, series(lint,fileWatch));
+exports.default = parallel(CompressImage, minifyCss, compileSass, compressJs, series(lint,fileWatch));
 //exports.default = series(lint,CompressImage,fileWatch);

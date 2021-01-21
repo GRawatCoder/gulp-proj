@@ -16,8 +16,10 @@
     "gulp-imagemin": "^7.1.0",
     "gulp-jshint": "^2.1.0",
     "gulp-plumber": "^1.2.1",
+    "gulp-sass": "^4.1.0",
     "gulp-uglify": "^3.0.2",
     "gulp-watch": "^5.0.1",
-    "jshint": "^2.12.0"
+    "jshint": "^2.12.0",
+    "node-sass": "^5.0.0"
   }
 }

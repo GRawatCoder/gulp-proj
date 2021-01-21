@@ -43,7 +43,7 @@ function compressJs() {
     return src('./js/*.js')
           .pipe(uglify())
           .pipe(dest('dist/js'));
-  }
+}
 
 function fileWatch(){
      return watch(SOURCE,filesChanged);

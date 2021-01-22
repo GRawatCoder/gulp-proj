@@ -8,6 +8,7 @@ const uglify= require('gulp-uglify');
 const sass = require('gulp-sass');
 const less = require('gulp-less');
 const concat = require('gulp-concat');
+const iconFont = require('gulp-iconfont');
 const browsersync = require('browser-sync');
 const server = browsersync.create();
 
@@ -17,6 +18,7 @@ const IMAGE_SOURCE = './pre-images/*';
 const STYLE_SOURCE = './css/*';
 const SASS_SOURCE='./sass/*.scss';
 const LESS_SOURCE='./less/*.less';
+const ICON_SOURCE = './assets/icons/*.svg';
 
 function reload(done){
     server.reload();
@@ -82,6 +84,21 @@ function concatJSFiles(){
     .pipe(concat('all.js'),{newline:';'})
     .pipe(dest('dist'));
 }
+
+function createIconFont(){
+    return src(ICON_SOURCE)
+    .pipe(iconFont({
+        fontName: 'myfont', // required
+        prependUnicode: true, // recommended option
+        formats: ['ttf', 'eot', 'woff'] // default, 'woff2' and 'svg' are available        
+    }))
+    .on('glyphs',function(glyphs,options){
+        // CSS templating, e.g.
+        console.log(glyphs, options);
+    })
+    .pipe(dest('dist/icons'));
+}
+
 /*
 function fileWatch(){
      return watch(SOURCE,filesChanged);
@@ -92,6 +109,6 @@ function fileWatch(){
      watch([STYLE_SOURCE,SOURCE],series(minifyCss,compressJs,compileSass,compileLess,reload));
 }
 
-exports.default = series(CompressImage, minifyCss, compileSass, compileLess,compressJs,serve,fileWatch);
+exports.default = series(createIconFont,CompressImage, minifyCss, compileSass, compileLess,compressJs,serve,fileWatch);
 //exports.default = parallel(CompressImage, minifyCss, compileSass, compileLess, series(compressJs,lint,concatJSFiles,fileWatch));
 //exports.default = series(lint,CompressImage,fileWatch);

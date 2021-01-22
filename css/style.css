@@ -3,6 +3,7 @@ ul { list-style-image: url("mybullet.jpg"); font: 32px; }
 .framed { 
     border: solid 3px red;
     padding: 6px;}
-.pink { background-color: pink; }
+.pink { background-color:floralwhite; }
 .blue { background-color: blue; }
 .green { background-color: green; }
+body{color: brown;background-color:darkmagenta;}

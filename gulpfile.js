@@ -8,6 +8,8 @@ const uglify= require('gulp-uglify');
 const sass = require('gulp-sass');
 const less = require('gulp-less');
 const concat = require('gulp-concat');
+const browsersync = require('browser-sync');
+const server = browsersync.create();
 
 const SOURCE = './js/*.js';
 const DESTINATION = 'dist';
@@ -15,6 +17,19 @@ const IMAGE_SOURCE = './pre-images/*';
 const STYLE_SOURCE = './css/*';
 const SASS_SOURCE='./sass/*.scss';
 const LESS_SOURCE='./less/*.less';
+
+function reload(done){
+    server.reload();
+    done();
+}
+function serve(done){
+    server.init({
+        server:{
+            baseDir:'./'
+        }
+    });
+    done();
+}
 
 function lint(){
     return src(SOURCE)
@@ -67,10 +82,16 @@ function concatJSFiles(){
     .pipe(concat('all.js'),{newline:';'})
     .pipe(dest('dist'));
 }
-
+/*
 function fileWatch(){
      return watch(SOURCE,filesChanged);
 }
+*/
 
-exports.default = parallel(CompressImage, minifyCss, compileSass, compileLess, series(compressJs,lint,concatJSFiles,fileWatch));
+function fileWatch(){
+     watch([STYLE_SOURCE,SOURCE],series(minifyCss,compressJs,compileSass,compileLess,reload));
+}
+
+exports.default = series(CompressImage, minifyCss, compileSass, compileLess,compressJs,serve,fileWatch);
+//exports.default = parallel(CompressImage, minifyCss, compileSass, compileLess, series(compressJs,lint,concatJSFiles,fileWatch));
 //exports.default = series(lint,CompressImage,fileWatch);

@@ -1,0 +1,1 @@
+function showme(){console.log("show me1")}int=0,console.log("gaurav22"),showme(),console.log("run successfully");

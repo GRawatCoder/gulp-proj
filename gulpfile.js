@@ -6,12 +6,15 @@ const imagemin = require('gulp-imagemin');
 const cleanCSS = require('gulp-clean-css');
 const uglify= require('gulp-uglify');
 const sass = require('gulp-sass');
+const less = require('gulp-less');
+const concat = require('gulp-concat');
 
 const SOURCE = './js/*.js';
 const DESTINATION = 'dist';
 const IMAGE_SOURCE = './pre-images/*';
 const STYLE_SOURCE = './css/*';
 const SASS_SOURCE='./sass/*.scss';
+const LESS_SOURCE='./less/*.less';
 
 function lint(){
     return src(SOURCE)
@@ -53,9 +56,21 @@ function compileSass(){
     .pipe(dest('dist/sass'));
 }
 
+function compileLess(){
+    return src(SOURCE)
+    .pipe(concat('all.js'))
+    .pipe(dest('dist'));
+}
+
+function concatJSFiles(){
+    return src(LESS_SOURCE)
+    .pipe(less())
+    .pipe(dest('dist/less'));
+}
+
 function fileWatch(){
      return watch(SOURCE,filesChanged);
 }
 
-exports.default = parallel(CompressImage, minifyCss, compileSass, compressJs, series(lint,fileWatch));
+exports.default = parallel(CompressImage, minifyCss, compileSass, compileLess, series(compressJs,lint,concatJSFiles,fileWatch));
 //exports.default = series(lint,CompressImage,fileWatch);

@@ -57,15 +57,15 @@ function compileSass(){
 }
 
 function compileLess(){
-    return src(SOURCE)
-    .pipe(concat('all.js'))
-    .pipe(dest('dist'));
-}
-
-function concatJSFiles(){
     return src(LESS_SOURCE)
     .pipe(less())
     .pipe(dest('dist/less'));
+}
+
+function concatJSFiles(){
+    return src(SOURCE)
+    .pipe(concat('all.js'),{newline:';'})
+    .pipe(dest('dist'));
 }
 
 function fileWatch(){
